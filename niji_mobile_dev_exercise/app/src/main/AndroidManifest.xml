@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NijiMobileDevExercise">
         <activity
-            android:name=".MainActivity"
+            android:name=".TemperatureActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,5 +19,6 @@
             </intent-filter>
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
