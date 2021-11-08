@@ -8,12 +8,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Debug;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Activité affichant la température d'un lieu
@@ -23,10 +20,11 @@ import java.util.Optional;
 public class TemperatureActivity extends AppCompatActivity {
 
     private final static String API_URL = "https://api.openweathermap.org/";
-    private final static String API_ID = "02b0ee5aa3573ae225a441e9d73bf37d";
     private final static String ZIP = "35700,fr";
     private final static String UNITS = "metric";
     private final static String LANG = "fr";
+
+    private String apiKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,21 +33,29 @@ public class TemperatureActivity extends AppCompatActivity {
 
         TextView tvTemperature = (TextView) findViewById(R.id.temperature);
         TextView tvLocalisation = (TextView) findViewById(R.id.localisation);
-        setCurrentInfo(tvTemperature, tvLocalisation);
+
+        try {
+            apiKey = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA).metaData.getString("com.google.android.geo.API_KEY");
+            writeCurrentWeatherData(tvTemperature, tvLocalisation);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
      * Affiche la température et la localisation
-     * @param tvTemperature TextView affichant la température
+     *
+     * @param tvTemperature  TextView affichant la température
      * @param tvLocalisation TextView affichant la localisation
      */
-    private void setCurrentInfo(TextView tvTemperature, TextView tvLocalisation) {
+    private void writeCurrentWeatherData(TextView tvTemperature, TextView tvLocalisation) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         WeatherService service = retrofit.create(WeatherService.class);
-        Call<WeatherResponse> call = service.getCurrentWeatherData(ZIP, API_ID, UNITS, LANG);
+        Call<WeatherResponse> call = service.getCurrentWeatherData(ZIP, apiKey, UNITS, LANG);
         call.enqueue(new Callback<WeatherResponse>() {
 
             @Override
@@ -64,7 +70,6 @@ public class TemperatureActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<WeatherResponse> call, @NonNull Throwable t) {
-                tvTemperature.setText("");
                 tvLocalisation.setText(t.getMessage());
             }
         });
