@@ -5,7 +5,7 @@ Sujet : https://github.com/NijiDigital/Mobile_Dev_Warm_Up
 
 ## Travail réalisé
 <img src="https://github.com/jcochet/niji_mobile_dev_exercise/blob/main/readme/screenshot.jpg?raw=true" width="25%" height="25%"/>
-L'application consiste en une page affichant la température actuelle de Rennes. Les informations météorologiques sont récupérées via l'API Open Weather.
+L'application consiste en une page affichant le temps et la température actuelle de Rennes. Les informations météorologiques sont récupérées via l'API Open Weather.
 
 ## Lancer l'application
 Une release sous forme d'APK est disponible sur cette page GitHub.
